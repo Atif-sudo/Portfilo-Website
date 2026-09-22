@@ -7,25 +7,14 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib import error, request
 
+try:
+    import mysql.connector
+except ImportError:
+    mysql = None
+
 ROOT = Path(__file__).resolve().parent
 PORT = int(os.getenv('PORT', '3000'))
 DB_PATH = ROOT / 'portfolio.db'
-
-
-def init_db():
-    with sqlite3.connect(DB_PATH) as conn:
-        conn.execute(
-            '''
-            CREATE TABLE IF NOT EXISTS portfolio_messages (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
-                email TEXT NOT NULL,
-                message TEXT NOT NULL,
-                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-            )
-            '''
-        )
-        conn.commit()
 
 
 def load_env_file():
@@ -43,11 +32,138 @@ def load_env_file():
             os.environ[key] = value.strip('"').strip("'")
 
 
+def build_mysql_config():
+    if mysql is None:
+        return None
+
+    mysql_host = os.getenv('MYSQL_HOST')
+    mysql_user = os.getenv('MYSQL_USER')
+    mysql_password = os.getenv('MYSQL_PASSWORD')
+    mysql_database = os.getenv('MYSQL_DATABASE')
+    if not (mysql_host and mysql_user and mysql_password and mysql_database):
+        return None
+
+    return {
+        'host': mysql_host,
+        'port': int(os.getenv('MYSQL_PORT', '3306')),
+        'user': mysql_user,
+        'password': mysql_password,
+        'database': mysql_database,
+        'autocommit': True,
+        'charset': 'utf8mb4',
+        'use_unicode': True,
+    }
+
+
 load_env_file()
 
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+PLACEHOLDER_OPENAI_KEY_VALUES = {
+    'your_api_key_here',
+    'your_api*****here',
+    'your_api_key',
+    'your_key_here',
+    'replace_me',
+    'changeme',
+}
+
+
+def has_valid_openai_key(value):
+    if value is None:
+        return False
+
+    cleaned = str(value).strip()
+    if not cleaned:
+        return False
+
+    normalized = cleaned.lower().replace('-', '').replace('_', '').replace(' ', '')
+    if normalized in {item.lower().replace('-', '').replace('_', '').replace(' ', '') for item in PLACEHOLDER_OPENAI_KEY_VALUES}:
+        return False
+
+    if cleaned.lower().startswith('your_'):
+        return False
+
+    return True
+
+
+OPENAI_API_KEY = (os.getenv('OPENAI_API_KEY') or '').strip()
+if not has_valid_openai_key(OPENAI_API_KEY):
+    OPENAI_API_KEY = ''
 OPENAI_MODEL = os.getenv('OPENAI_MODEL', 'gpt-4o-mini')
 OPENAI_BASE_URL = os.getenv('OPENAI_BASE_URL', 'https://api.openai.com/v1')
+MYSQL_CONFIG = build_mysql_config()
+
+
+def init_db():
+    if MYSQL_CONFIG is not None:
+        try:
+            connection = mysql.connector.connect(
+                host=MYSQL_CONFIG['host'],
+                port=MYSQL_CONFIG['port'],
+                user=MYSQL_CONFIG['user'],
+                password=MYSQL_CONFIG['password'],
+                autocommit=True,
+                charset='utf8mb4',
+                use_unicode=True,
+            )
+            cursor = connection.cursor()
+            cursor.execute(
+                f"CREATE DATABASE IF NOT EXISTS `{MYSQL_CONFIG['database']}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"
+            )
+            cursor.execute(f"USE `{MYSQL_CONFIG['database']}`")
+            cursor.execute(
+                '''
+                CREATE TABLE IF NOT EXISTS portfolio_messages (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(255) NOT NULL,
+                    email VARCHAR(255) NOT NULL,
+                    message TEXT NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+                '''
+            )
+            connection.close()
+            return 'mysql'
+        except Exception as exc:
+            print(f'MySQL init warning: {exc}. Falling back to SQLite.', file=sys.stderr)
+
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            '''
+            CREATE TABLE IF NOT EXISTS portfolio_messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                message TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            '''
+        )
+        conn.commit()
+    return 'sqlite'
+
+
+def save_contact_message(name, email, message):
+    if MYSQL_CONFIG is not None:
+        try:
+            connection = mysql.connector.connect(**MYSQL_CONFIG)
+            cursor = connection.cursor()
+            cursor.execute(
+                'INSERT INTO portfolio_messages (name, email, message) VALUES (%s, %s, %s)',
+                (name, email, message),
+            )
+            connection.commit()
+            connection.close()
+            return True
+        except Exception as exc:
+            print(f'MySQL contact insert failed: {exc}. Falling back to SQLite.', file=sys.stderr)
+
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            'INSERT INTO portfolio_messages (name, email, message) VALUES (?, ?, ?)',
+            (name, email, message),
+        )
+        conn.commit()
+    return True
 
 
 class PortfolioHandler(BaseHTTPRequestHandler):
@@ -63,7 +179,7 @@ class PortfolioHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == '/api/health':
-            self._send_json({'status': 'ok'})
+            self._send_json({'status': 'ok', 'database': DB_STATUS})
             return
 
         file_path = self._resolve_path(self.path)
@@ -98,8 +214,7 @@ class PortfolioHandler(BaseHTTPRequestHandler):
 
         if not OPENAI_API_KEY:
             self._send_json({
-                'reply':
-                    'The live AI assistant is ready, but the server is missing an API key. Add OPENAI_API_KEY to a .env file to enable real AI responses.'
+                'reply': 'The OpenAI API key is missing or still uses the placeholder value. Open https://platform.openai.com/account/api-keys, add your real key to the OPENAI_API_KEY field in .env, and restart the server.'
             })
             return
 
@@ -109,8 +224,7 @@ class PortfolioHandler(BaseHTTPRequestHandler):
             'messages': [
                 {
                     'role': 'system',
-                    'content':
-                        'You are Alex Carter, a web developer and UI designer. Respond as a helpful portfolio assistant for a professional website. Keep answers concise, confident, and relevant to design, web development, project work, and collaboration.'
+                    'content': 'You are Alex Carter, a web developer and UI designer. Respond as a helpful portfolio assistant for a professional website. Keep answers concise, confident, and relevant to design, web development, project work, and collaboration.'
                 },
                 {'role': 'user', 'content': message}
             ]
@@ -137,6 +251,14 @@ class PortfolioHandler(BaseHTTPRequestHandler):
                 detail = parsed_error.get('error', {}).get('message', api_error)
             except json.JSONDecodeError:
                 detail = api_error
+
+            lower_detail = str(detail).lower()
+            if 'no credits remaining' in lower_detail or 'insufficient_quota' in lower_detail or 'billing' in lower_detail or 'quota' in lower_detail or exc.code == 429:
+                self._send_json({
+                    'reply': 'I am temporarily unavailable because the connected OpenAI account has no remaining credits. Add billing to continue using the assistant.'
+                })
+                return
+
             self._send_json({'error': 'AI request failed.', 'details': detail}, status=500)
             return
         except Exception as exc:
@@ -168,13 +290,7 @@ class PortfolioHandler(BaseHTTPRequestHandler):
             self._send_json({'error': 'Name, email, and message are required.'}, status=400)
             return
 
-        with sqlite3.connect(DB_PATH) as conn:
-            conn.execute(
-                'INSERT INTO portfolio_messages (name, email, message) VALUES (?, ?, ?)',
-                (name, email, message)
-            )
-            conn.commit()
-
+        save_contact_message(name, email, message)
         self._send_json({
             'success': True,
             'message': 'Thanks! Your message has been saved and I will get back to you soon.'
@@ -236,10 +352,12 @@ class PortfolioHandler(BaseHTTPRequestHandler):
         self.wfile.write(message.encode('utf-8'))
 
 
+DB_STATUS = init_db()
+
 if __name__ == '__main__':
-    init_db()
     server = ThreadingHTTPServer(('0.0.0.0', PORT), PortfolioHandler)
     print(f'Portfolio AI server running at http://localhost:{PORT}')
+    print(f'Database status: {DB_STATUS}')
     try:
         server.serve_forever()
     except KeyboardInterrupt:

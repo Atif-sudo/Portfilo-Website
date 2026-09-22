@@ -1,0 +1,31 @@
+Alex Carter
+Frontend Developer & UI Designer
+
+Email: alex@portfolio.dev
+Portfolio: https://localhost:3000
+LinkedIn: https://www.linkedin.com
+GitHub: https://github.com
+
+Summary
+A frontend-focused designer and developer with experience building high-converting, premium digital experiences for product teams, startups, and creative brands.
+
+Core strengths
+- Responsive frontend development
+- UX-first design and conversion strategy
+- Design systems and polished product experiences
+- Performance optimization and accessibility
+
+Selected Experience
+Senior Frontend Developer | 2022 — Present
+Leading product experiences for growing businesses with a focus on UX, conversion, and polish.
+
+Web Designer & Developer | 2019 — 2022
+Created user-first digital experiences for startups and agencies across multiple industries.
+
+Visual Designer | 2017 — 2019
+Crafted brand systems, digital marketing assets, and conversion-driven landing pages.
+
+Tools and Technologies
+React, JavaScript, HTML5, CSS, Figma, Git, GitHub, UX strategy
+
+Available for freelance, product design partnerships, and frontend build work.
