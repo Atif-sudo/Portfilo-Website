@@ -112,6 +112,54 @@ if (agentForm && agentInput && agentChat) {
   });
 }
 
+const contactForm = document.querySelector('#contact-form');
+const contactStatus = document.querySelector('#contact-status');
+
+if (contactForm && contactStatus) {
+  contactForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(contactForm);
+    const payload = {
+      name: String(formData.get('name') || '').trim(),
+      email: String(formData.get('email') || '').trim(),
+      message: String(formData.get('message') || '').trim()
+    };
+
+    if (!payload.name || !payload.email || !payload.message) {
+      contactStatus.textContent = 'Please complete all fields before sending.';
+      contactStatus.classList.add('error');
+      return;
+    }
+
+    contactStatus.textContent = 'Sending your message...';
+    contactStatus.classList.remove('error');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Unable to send your message right now.');
+      }
+
+      contactForm.reset();
+      contactStatus.textContent = data.message || 'Your message has been saved successfully.';
+      contactStatus.classList.remove('error');
+    } catch (error) {
+      contactStatus.textContent = error.message || 'Something went wrong. Please try again.';
+      contactStatus.classList.add('error');
+    }
+  });
+}
+
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {

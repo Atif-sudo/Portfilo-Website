@@ -228,6 +228,24 @@
         </div>
         <a href="mailto:alex@portfolio.dev" class="btn btn-primary">alex@portfolio.dev</a>
       </div>
+
+      <div class="container contact-section reveal">
+        <form id="contact-form" class="contact-form">
+          <div class="input-row">
+            <label class="sr-only" for="contact-name">Name</label>
+            <input id="contact-name" name="name" type="text" placeholder="Your name" required />
+            <label class="sr-only" for="contact-email">Email</label>
+            <input id="contact-email" name="email" type="email" placeholder="Email address" required />
+          </div>
+          <label class="sr-only" for="contact-message">Project details</label>
+          <textarea id="contact-message" name="message" rows="4" placeholder="Tell me about your project..." required></textarea>
+          <div class="contact-actions">
+            <button type="submit" class="btn btn-primary">Send Inquiry</button>
+            <p id="contact-status" class="form-status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+
       <div class="container bottom-bar">
         <p>© <span id="year"></span> Alex Carter. All rights reserved.</p>
         <div class="socials">

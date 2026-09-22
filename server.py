@@ -1,6 +1,7 @@
 import json
 import mimetypes
 import os
+import sqlite3
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -8,6 +9,23 @@ from urllib import error, request
 
 ROOT = Path(__file__).resolve().parent
 PORT = int(os.getenv('PORT', '3000'))
+DB_PATH = ROOT / 'portfolio.db'
+
+
+def init_db():
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            '''
+            CREATE TABLE IF NOT EXISTS portfolio_messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                message TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+            '''
+        )
+        conn.commit()
 
 
 def load_env_file():
@@ -56,6 +74,10 @@ class PortfolioHandler(BaseHTTPRequestHandler):
         self._serve_file(file_path)
 
     def do_POST(self):
+        if self.path == '/api/contact':
+            self._handle_contact_submission()
+            return
+
         if self.path != '/api/chat':
             self._send_error(404, 'Not found')
             return
@@ -128,6 +150,36 @@ class PortfolioHandler(BaseHTTPRequestHandler):
 
         self._send_json({'reply': reply})
 
+    def _handle_contact_submission(self):
+        content_length = int(self.headers.get('Content-Length', '0'))
+        raw_body = self.rfile.read(content_length)
+
+        try:
+            payload = json.loads(raw_body.decode('utf-8') or '{}')
+        except json.JSONDecodeError:
+            self._send_json({'error': 'Invalid JSON payload.'}, status=400)
+            return
+
+        name = str(payload.get('name', '')).strip()
+        email = str(payload.get('email', '')).strip()
+        message = str(payload.get('message', '')).strip()
+
+        if not name or not email or not message:
+            self._send_json({'error': 'Name, email, and message are required.'}, status=400)
+            return
+
+        with sqlite3.connect(DB_PATH) as conn:
+            conn.execute(
+                'INSERT INTO portfolio_messages (name, email, message) VALUES (?, ?, ?)',
+                (name, email, message)
+            )
+            conn.commit()
+
+        self._send_json({
+            'success': True,
+            'message': 'Thanks! Your message has been saved and I will get back to you soon.'
+        })
+
     def _resolve_path(self, raw_path):
         path = raw_path.split('?', 1)[0]
         if path in ('', '/'):
@@ -185,6 +237,7 @@ class PortfolioHandler(BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
+    init_db()
     server = ThreadingHTTPServer(('0.0.0.0', PORT), PortfolioHandler)
     print(f'Portfolio AI server running at http://localhost:{PORT}')
     try:
