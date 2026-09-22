@@ -1,0 +1,14 @@
+{
+  "name": "portfolio-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portfolio website with a local AI assistant backend",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
