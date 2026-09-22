@@ -1,98 +1,106 @@
 const portfolioHighlights = [
-  { label: 'Years Experience', value: '5+' },
-  { label: 'Projects Delivered', value: '28' },
-  { label: 'Happy Clients', value: '12' }
+  { label: 'Experience', value: '1.5+' },
+  { label: 'Security Focus', value: 'BAS' },
+  { label: 'Primary Domain', value: 'Banking & Finance' }
 ];
 
 const skills = [
-  { title: 'Design', text: 'Figma, UX flows, visual systems, landing page design.' },
-  { title: 'Development', text: 'React, JavaScript, HTML5, CSS, API-driven interfaces.' },
-  { title: 'Performance', text: 'Responsive layouts, accessibility, SEO, and speed optimization.' },
-  { title: 'Workflow', text: 'Git, GitHub, clean collaboration, iterative release cycles.' }
+  { title: 'Breach & Attack Simulation', text: 'Using Cymulate to validate EDR, DLP, email security, proxy, and web-security controls across client environments.' },
+  { title: 'Attack Surface Management', text: 'Assessing external exposure and supporting visibility into digital assets and control effectiveness.' },
+  { title: 'Phishing Readiness', text: 'Running phishing-awareness simulations and supporting user-risk awareness programs for operational resilience.' },
+  { title: 'Offensive Security Growth', text: 'Building hands-on skills in infrastructure, Active Directory, web applications, APIs, and red-team fundamentals.' }
 ];
 
 const projects = [
   {
-    type: 'Brand Website',
-    name: 'Northstar Studio',
-    text: 'A premium studio website designed to spotlight storytelling and conversion-focused creative work.',
+    type: 'Security Validation',
+    name: 'Cymulate BAS Program',
+    titleLines: ['Cymulate BAS', 'Program'],
+    text: 'Validated EDR, DLP, email security, proxy and web security controls for multiple enterprise and banking clients.',
     accent: 'project-one'
   },
   {
-    type: 'E-commerce',
-    name: 'Velora Market',
-    text: 'A polished storefront concept built to elevate trust, browsing flow, and product clarity.',
+    type: 'Client Assessment',
+    name: 'Security Control Reporting',
+    titleLines: ['Security Control', 'Reporting'],
+    text: 'Prepared assessment summaries, tracked client gaps, and coordinated remediation-focused findings with stakeholders.',
     accent: 'project-two'
   },
   {
-    type: 'SaaS Product',
-    name: 'FlowPilot',
-    text: 'A product landing page engineered to explain a complex solution with clarity and confidence.',
+    type: 'Hands-on Learning',
+    name: 'Penetration Testing Roadmap',
+    titleLines: ['Penetration', 'Testing'],
+    text: 'Expanding practical knowledge across infrastructure, Active Directory, web applications and APIs with a red-team mindset.',
     accent: 'project-three'
   }
 ];
 
 const timeline = [
   {
-    period: '2022 — Present',
-    title: 'Senior Frontend Developer',
-    text: 'Leading product experiences for growing businesses with a focus on UX, conversion, and polish.'
+    period: '2024 — Present',
+    title: 'Cybersecurity Analyst',
+    text: 'Working at Digital Track Solutions, Mumbai, performing Breach and Attack Simulation using Cymulate and validating enterprise security controls for banking and financial-services clients.'
+  },
+  {
+    period: '2022 — 2024',
+    title: 'Security Operations & Growth',
+    text: 'Built exposure in ASM, phishing-awareness simulations, client coordination, assessment reporting, and continuous security validation practices.'
   },
   {
     period: '2019 — 2022',
-    title: 'Web Designer & Developer',
-    text: 'Created user-first digital experiences for startups and agencies across multiple industries.'
+    title: 'MCA — Pondicherry University',
+    text: 'Completed my Master of Computer Applications, with a focus on practical application, systems thinking and technical foundation building.'
   },
   {
-    period: '2017 — 2019',
-    title: 'Visual Designer',
-    text: 'Crafted brand systems, digital marketing assets, and conversion-driven landing pages.'
+    period: '2017 — 2020',
+    title: 'BCA — Indira Gandhi National Tribal University',
+    text: 'Completed my Bachelor of Computer Applications at Indira Gandhi National Tribal University, Amarkantak.'
   }
 ];
 
 const testimonials = [
   {
-    quote: 'Alex transformed our product story into a cleaner, more convincing experience. The site immediately felt more premium and trustworthy.',
-    name: 'Maya Chen',
-    role: 'Marketing Lead, Northstar Studio'
+    quote: 'Strong understanding of control validation and client reporting, with a disciplined approach to identifying real security gaps and communicating them clearly.',
+    name: 'Security Assessment Team',
+    role: 'Client Engagement Perspective'
   },
   {
-    quote: 'The design and development process felt collaborative, strategic, and fast. We launched with more clarity and better conversion flow.',
-    name: 'David Brooks',
-    role: 'Founder, Velora Market'
+    quote: 'Atif brings a practical mindset to cybersecurity validation. He translates technical findings into clear, actionable security outcomes for stakeholders.',
+    name: 'Client Coordination Review',
+    role: 'Operational Security Lens'
   },
   {
-    quote: 'A rare mix of visual polish and real business thinking. Alex balances good design with outcomes that support growth.',
-    name: 'Rina Patel',
-    role: 'Product Director, FlowPilot'
+    quote: 'His current focus on BAS, ASM, and offensive security fundamentals shows the right blend of hands-on skill and long-term growth potential.',
+    name: 'Career Progression View',
+    role: 'Security Capability Development'
   }
 ];
 
 const processSteps = [
   {
     step: '01',
-    title: 'Discovery & direction',
-    text: 'Clarify the audience, strategy, and key outcomes before a single design decision is made.'
+    title: 'Assess the risk surface',
+    text: 'Review the environment, exposures, and security controls to identify the real gaps before any action is taken.'
   },
   {
     step: '02',
-    title: 'Design with intent',
-    text: 'Build interfaces that feel premium, are easy to navigate, and guide the user toward action.'
+    title: 'Validate controls in practice',
+    text: 'Use real-world validation methods such as BAS, phishing testing, and review of EDR, DLP, proxy, and web security controls.'
   },
   {
     step: '03',
-    title: 'Launch & optimize',
-    text: 'Ship clean, responsive experiences and keep improving based on real-world feedback.'
+    title: 'Report and improve',
+    text: 'Translate technical results into clear client-facing guidance and support a measurable path toward stronger resilience.'
   }
 ];
 
 const quickPrompts = [
-  'What services do you offer?',
-  'Show me your project experience.',
-  'How can we work together?'
+  'What is your cybersecurity experience?',
+  'How do you validate security controls?',
+  'Can you help with BAS and phishing awareness?'
 ];
 
-const clientLogos = ['Northstar', 'Velora', 'FlowPilot', 'Summit', 'Aster Labs', 'LaunchGrid'];
+const clientLogos = ['FinSecure', 'Aegis Bank', 'CrestID', 'IronGate', 'NorthStar', 'CyberOne'];
 
 function PortfolioApp() {
   const [isChatOpen, setIsChatOpen] = React.useState(false);
@@ -102,12 +110,13 @@ function PortfolioApp() {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [activeSection, setActiveSection] = React.useState('home');
   const [showBackToTop, setShowBackToTop] = React.useState(false);
+  const [activeExperience, setActiveExperience] = React.useState(0);
   const [contactForm, setContactForm] = React.useState({
     name: '',
     email: '',
     company: '',
-    projectType: 'Website Design',
-    budget: 'Under $2k',
+    projectType: 'Breach & Attack Simulation',
+    budget: 'Under ₹2L',
     message: ''
   });
   const [contactStatus, setContactStatus] = React.useState('');
@@ -196,13 +205,13 @@ function PortfolioApp() {
     doc.setTextColor(237, 244, 255);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(24);
-    doc.text('Alex Carter', margin, 72);
+    doc.text('Mohammad Atif Ansari', margin, 72);
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(11);
     doc.setTextColor(185, 199, 216);
-    doc.text('Frontend Developer & UI Designer', margin, 96);
-    doc.text('alex@portfolio.dev  •  New York, USA', margin, 118);
+    doc.text('Cybersecurity Analyst', margin, 96);
+    doc.text('Digital Track Solutions, Mumbai  •  atifansari.security@gmail.com', margin, 118);
 
     doc.setDrawColor(116, 225, 255);
     doc.setLineWidth(1);
@@ -214,7 +223,7 @@ function PortfolioApp() {
     doc.text('Profile', margin, 170);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(11);
-    const profile = 'Frontend-focused designer and developer building premium digital experiences with a strong focus on clarity, conversion, and polished product storytelling.';
+    const profile = 'Cybersecurity Analyst with hands-on experience in Breach and Attack Simulation using Cymulate, control validation for EDR, DLP, email security, proxy and web security, and active learning in infrastructure, AD, web applications and API security.';
     const profileLines = doc.splitTextToSize(profile, pageWidth - margin * 2);
     doc.text(profileLines, margin, 192);
 
@@ -223,33 +232,33 @@ function PortfolioApp() {
     doc.text('Core strengths', margin, 258);
     doc.setFont('helvetica', 'normal');
     const strengths = [
-      '• Responsive frontend development',
-      '• UX-first design and conversion strategy',
-      '• Design systems and polished product experiences',
-      '• Performance optimization and accessibility'
+      '• Breach and Attack Simulation using Cymulate',
+      '• Security control validation for EDR, DLP, email, proxy and web security',
+      '• ASM, phishing-awareness simulations and client reporting',
+      '• Manual penetration testing growth across infra, AD, web apps and APIs'
     ];
     strengths.forEach((item, index) => {
       doc.text(item, margin, 282 + index * 18);
     });
 
     doc.setFont('helvetica', 'bold');
-    doc.text('Experience', margin, 370);
+    doc.text('Education & Experience', margin, 370);
     doc.setFont('helvetica', 'normal');
     const experience = [
-      'Senior Frontend Developer | 2022 — Present',
-      'Leading product experiences for growing businesses with a focus on UX, conversion, and polish.',
+      'Cybersecurity Analyst | Digital Track Solutions, Mumbai | 2024 — Present',
+      'Validate security controls for banking and financial-services clients with Cymulate BAS.',
       '',
-      'Web Designer & Developer | 2019 — 2022',
-      'Created user-first digital experiences for startups and agencies across multiple industries.',
+      'MCA | Pondicherry University | 2022',
+      'Completed Master of Computer Applications.',
       '',
-      'Visual Designer | 2017 — 2019',
-      'Crafted brand systems, digital marketing assets, and conversion-driven landing pages.'
+      'BCA | Indira Gandhi National Tribal University, Amarkantak | 2020',
+      'Completed Bachelor of Computer Applications.'
     ];
     experience.forEach((line, index) => {
       doc.text(line, margin, 392 + index * 18);
     });
 
-    doc.save('Alex-Carter-Resume.pdf');
+    doc.save('Mohammad-Atif-Ansari-Resume.pdf');
   };
 
   const handleContactSubmit = async (event) => {
@@ -300,7 +309,7 @@ function PortfolioApp() {
     <>
       <header className="site-header">
         <div className="container nav-wrap">
-          <a href="#home" className="brand">Alex<span>Carter</span></a>
+          <a href="#home" className="brand">Atif<span>Ansari</span></a>
 
           <button
             type="button"
@@ -329,15 +338,16 @@ function PortfolioApp() {
       <main>
         <section id="home" className="hero">
           <div className="container hero-grid">
+            <div className="hero-visual reveal" aria-hidden="true" />
             <div className="hero-copy reveal">
-              <p className="eyebrow">Web Developer & UI Designer</p>
-              <h1>Building digital experiences that feel <span>human.</span></h1>
+              <p className="eyebrow">Cybersecurity Analyst</p>
+              <h1>Selected security validation and <span>assessment work.</span></h1>
               <p className="lead">
-                I design and build thoughtful, high-performing websites that help brands communicate clearly, convert visitors, and stay memorable.
+                I’m Mohammad Atif Ansari, a cybersecurity analyst based in Mumbai with 1.5 years of hands-on experience in breach and attack simulation, security validation, and client-focused assessment reporting.
               </p>
               <div className="hero-actions">
-                <a href="#projects" className="btn btn-primary">View Projects</a>
-                <a href="#contact" className="btn btn-secondary">Let’s Talk</a>
+                <a href="#projects" className="btn btn-primary">View Security Work</a>
+                <a href="#contact" className="btn btn-secondary">Let’s Connect</a>
                 <button type="button" className="btn btn-tertiary" onClick={handleDownloadResume}>Download PDF Resume</button>
               </div>
               <ul className="mini-stats">
@@ -348,23 +358,6 @@ function PortfolioApp() {
                   </li>
                 ))}
               </ul>
-            </div>
-
-            <div className="hero-card reveal">
-              <div className="profile-frame">
-                <div className="badge">Available for freelance</div>
-                <div className="avatar-wrap">
-                  <div className="avatar-glow" />
-                  <div className="avatar-illustration">
-                    <div className="head" />
-                    <div className="body" />
-                  </div>
-                </div>
-                <div className="card-details">
-                  <h3>Alex Carter</h3>
-                  <p>Frontend Developer</p>
-                </div>
-              </div>
             </div>
           </div>
         </section>
@@ -384,29 +377,29 @@ function PortfolioApp() {
           <div className="container">
             <div className="section-heading reveal">
               <p className="eyebrow">About Me</p>
-              <h2>Turning ideas into polished digital products.</h2>
+              <h2>Focused on validating security controls and building resilience.</h2>
             </div>
             <div className="about-grid">
               <div className="about-copy reveal">
                 <p>
-                  I’m a multidisciplinary developer with a love for building experiences that feel effortless. My work blends design thinking, frontend craftsmanship, and product strategy to shape digital experiences that look sharp and perform well.
+                  I completed my BCA from Indira Gandhi National Tribal University, Amarkantak, and then my MCA from Pondicherry University, graduating in 2022. I currently work as a Cybersecurity Analyst at Digital Track Solutions in Mumbai.
                 </p>
                 <p>
-                  From product ideas to fully launched interfaces, I help teams create websites that communicate confidently and convert attention into action.
+                  My primary work is Breach and Attack Simulation using Cymulate, where I validate controls such as EDR, DLP, email security, proxy and web security across clients in banking and financial-services environments. I also support ASM, phishing-awareness activities, client coordination and detailed assessment reporting.
                 </p>
               </div>
               <div className="about-panel reveal">
                 <div>
                   <span>Based in</span>
-                  <strong>New York, USA</strong>
+                  <strong>Mumbai, India</strong>
                 </div>
                 <div>
                   <span>Specialty</span>
-                  <strong>Responsive Web Design</strong>
+                  <strong>Breach & Attack Simulation</strong>
                 </div>
                 <div>
                   <span>Focus</span>
-                  <strong>UX + Front-end Performance</strong>
+                  <strong>Control Validation & Red-Team Growth</strong>
                 </div>
               </div>
             </div>
@@ -417,7 +410,7 @@ function PortfolioApp() {
           <div className="container">
             <div className="section-heading reveal">
               <p className="eyebrow">Skills</p>
-              <h2>Tools and technologies I use every day.</h2>
+              <h2>Security capabilities and learning focus.</h2>
             </div>
             <div className="skills-grid">
               {skills.map((skill) => (
@@ -433,8 +426,8 @@ function PortfolioApp() {
         <section id="projects" className="section">
           <div className="container">
             <div className="section-heading reveal">
-              <p className="eyebrow">Projects</p>
-              <h2>Selected work that blends strategy and execution.</h2>
+              <p className="eyebrow">Security Work</p>
+              <h2>Selected security validation and assessment work.</h2>
             </div>
             <div className="projects-grid">
               {projects.map((project) => (
@@ -442,7 +435,14 @@ function PortfolioApp() {
                   <div className={`project-image ${project.accent}`} />
                   <div className="project-content">
                     <span>{project.type}</span>
-                    <h3>{project.name}</h3>
+                    <h3>
+                      {project.titleLines ? project.titleLines.map((line, index) => (
+                        <React.Fragment key={`${project.name}-${index}`}>
+                          {line}
+                          {index < project.titleLines.length - 1 && <br />}
+                        </React.Fragment>
+                      )) : project.name}
+                    </h3>
                     <p>{project.text}</p>
                     <a href="#contact">Case Study</a>
                   </div>
@@ -455,8 +455,8 @@ function PortfolioApp() {
         <section id="testimonials" className="section">
           <div className="container">
             <div className="section-heading reveal">
-              <p className="eyebrow">Testimonials</p>
-              <h2>Trusted by teams that care about clarity and momentum.</h2>
+              <p className="eyebrow">Credibility</p>
+              <h2>Built around practical security validation and client readiness.</h2>
             </div>
             <div className="testimonial-grid">
               {testimonials.map((testimonial) => (
@@ -477,7 +477,7 @@ function PortfolioApp() {
           <div className="container">
             <div className="section-heading reveal">
               <p className="eyebrow">Approach</p>
-              <h2>Clear strategy, thoughtful design, measurable outcomes.</h2>
+              <h2>Security validation backed by practical offensive learning.</h2>
             </div>
             <div className="process-grid">
               {processSteps.map((step) => (
@@ -495,18 +495,33 @@ function PortfolioApp() {
           <div className="container">
             <div className="section-heading reveal">
               <p className="eyebrow">Experience</p>
-              <h2>My professional journey.</h2>
+              <h2>Academic and professional journey.</h2>
             </div>
             <div className="timeline reveal">
-              {timeline.map((item) => (
-                <div key={item.title} className="timeline-item">
-                  <div className="time">{item.period}</div>
-                  <div className="content">
-                    <h3>{item.title}</h3>
-                    <p>{item.text}</p>
+              {timeline.map((item, index) => {
+                const isOpen = activeExperience === index;
+                return (
+                  <div key={item.title} className={`timeline-item ${isOpen ? 'is-open' : ''}`}>
+                    <button
+                      type="button"
+                      className="timeline-toggle"
+                      onClick={() => setActiveExperience(isOpen ? -1 : index)}
+                      aria-expanded={isOpen}
+                    >
+                      <div className="time">{item.period}</div>
+                      <div className="timeline-header-copy">
+                        <h3>{item.title}</h3>
+                        <span className="timeline-indicator">{isOpen ? '−' : '+'}</span>
+                      </div>
+                    </button>
+                    {isOpen && (
+                      <div className="timeline-content">
+                        <p>{item.text}</p>
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
@@ -516,10 +531,10 @@ function PortfolioApp() {
         <div className="container footer-wrap">
           <div>
             <p className="eyebrow">Let’s Connect</p>
-            <h2>Need a sharper digital presence or a better conversion flow?</h2>
+            <h2>Available for security validation, control assessment, and growth-focused opportunities.</h2>
           </div>
           <div className="lead-cta-group">
-            <a href="mailto:alex@portfolio.dev" className="btn btn-primary">alex@portfolio.dev</a>
+            <a href="mailto:atifansari.security@gmail.com" className="btn btn-primary">atifansari.security@gmail.com</a>
             <button type="button" className="btn btn-secondary" onClick={handleDownloadResume}>Download PDF Resume</button>
           </div>
         </div>
@@ -529,14 +544,14 @@ function PortfolioApp() {
             <div className="lead-intel-card">
               <h3>What I can help with</h3>
               <ul>
-                <li>Brand and product websites</li>
-                <li>Landing pages with strong CTAs</li>
-                <li>UX-focused design and frontend build</li>
-                <li>Design systems and marketing experiences</li>
+                <li>Breach & Attack Simulation</li>
+                <li>Security control validation</li>
+                <li>Phishing awareness and ASM support</li>
+                <li>Client coordination and risk reporting</li>
               </ul>
               <div className="lead-intel-meta">
                 <span>Typical response time: within 24 hours</span>
-                <span>Available for freelance and product work</span>
+                <span>Open to security assessment and validation opportunities</span>
               </div>
             </div>
 
@@ -559,33 +574,34 @@ function PortfolioApp() {
                 <input
                   type="text"
                   value={contactForm.company}
-                  placeholder="Company or brand"
+                  placeholder="Company or organization"
                   onChange={(event) => setContactForm({ ...contactForm, company: event.target.value })}
                 />
                 <select
                   value={contactForm.projectType}
                   onChange={(event) => setContactForm({ ...contactForm, projectType: event.target.value })}
                 >
-                  <option>Website Design</option>
-                  <option>Landing Page</option>
-                  <option>E-commerce UX</option>
-                  <option>Product Design</option>
-                  <option>Frontend Development</option>
+                  <option>Breach & Attack Simulation</option>
+                  <option>Security Assessment</option>
+                  <option>Phishing Awareness Program</option>
+                  <option>Attack Surface Review</option>
+                  <option>Red-Team / PT Practice</option>
+                  <option>Other Security Need</option>
                 </select>
               </div>
               <select
                 value={contactForm.budget}
                 onChange={(event) => setContactForm({ ...contactForm, budget: event.target.value })}
               >
-                <option>Under $2k</option>
-                <option>$2k - $5k</option>
-                <option>$5k - $10k</option>
-                <option>$10k+</option>
+                <option>Under ₹2L</option>
+                <option>₹2L - ₹5L</option>
+                <option>₹5L - ₹10L</option>
+                <option>₹10L+</option>
               </select>
               <textarea
                 rows="4"
                 value={contactForm.message}
-                placeholder="Tell me about your project, timeline, and what you need help with..."
+                placeholder="Tell me about your security requirement, timeline, and what you need help with..."
                 onChange={(event) => setContactForm({ ...contactForm, message: event.target.value })}
               />
               <div className="contact-actions">
@@ -599,11 +615,11 @@ function PortfolioApp() {
         </div>
 
         <div className="container bottom-bar">
-          <p>© <span>{new Date().getFullYear()}</span> Alex Carter. All rights reserved.</p>
+          <p>© <span>{new Date().getFullYear()}</span> Mohammad Atif Ansari. All rights reserved.</p>
           <div className="socials">
             <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
             <a href="https://github.com" target="_blank" rel="noreferrer">GitHub</a>
-            <a href="https://dribbble.com" target="_blank" rel="noreferrer">Dribbble</a>
+            <a href="mailto:atifansari.security@gmail.com">Email</a>
           </div>
         </div>
       </footer>
@@ -619,7 +635,7 @@ function PortfolioApp() {
 
       <button type="button" className="chat-launcher" onClick={() => setIsChatOpen((value) => !value)} aria-expanded={isChatOpen}>
         <span className="chat-launcher-icon">💬</span>
-        Chat with Alex
+        Chat with Atif
       </button>
 
       <aside className={`chat-widget ${isChatOpen ? 'is-open' : ''}`} aria-hidden={!isChatOpen}>

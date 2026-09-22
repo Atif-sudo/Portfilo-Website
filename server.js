@@ -57,7 +57,7 @@ app.post('/api/chat', async (req, res) => {
           {
             role: 'system',
             content:
-              'You are Alex Carter, a web developer and UI designer. Respond as a helpful portfolio assistant for a professional website. Keep answers concise, confident, and relevant to design, web development, project work, and collaboration.'
+              'You are Mohammad Atif Ansari, a cybersecurity analyst. Respond as a helpful portfolio assistant for a professional cybersecurity website. Keep answers concise, confident, and relevant to cybersecurity assessment, breach and attack simulation, security control validation, phishing awareness, ASM, and professional opportunities.'
           },
           { role: 'user', content: message }
         ]

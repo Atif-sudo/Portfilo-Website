@@ -1,31 +1,31 @@
-Alex Carter
-Frontend Developer & UI Designer
+Mohammad Atif Ansari
+Cybersecurity Analyst
 
-Email: alex@portfolio.dev
-Portfolio: https://localhost:3000
+Email: atifansari.security@gmail.com
+Location: Mumbai, India
 LinkedIn: https://www.linkedin.com
 GitHub: https://github.com
 
-Summary
-A frontend-focused designer and developer with experience building high-converting, premium digital experiences for product teams, startups, and creative brands.
+Professional Summary
+Cybersecurity Analyst with 1.5 years of hands-on experience in Breach and Attack Simulation using Cymulate, validating security controls such as EDR, DLP, email security, proxy and web security for multiple clients, including banking and financial-services organizations. Also experienced in ASM, phishing-awareness simulations, client coordination and assessment reporting.
 
-Core strengths
-- Responsive frontend development
-- UX-first design and conversion strategy
-- Design systems and polished product experiences
-- Performance optimization and accessibility
+Core Strengths
+- Breach and Attack Simulation using Cymulate
+- Security control validation for EDR, DLP, email, proxy and web security
+- ASM and phishing-awareness simulations
+- Client coordination and technical reporting
+- Growth into manual penetration testing across infrastructure, Active Directory, web apps and APIs
 
-Selected Experience
-Senior Frontend Developer | 2022 — Present
-Leading product experiences for growing businesses with a focus on UX, conversion, and polish.
+Education
+BCA — Indira Gandhi National Tribal University, Amarkantak
+MCA — Pondicherry University (Graduated in 2022)
 
-Web Designer & Developer | 2019 — 2022
-Created user-first digital experiences for startups and agencies across multiple industries.
+Experience
+Cybersecurity Analyst | Digital Track Solutions, Mumbai | 2024 — Present
+Perform Breach and Attack Simulation and validate security controls for banking and financial-services clients.
 
-Visual Designer | 2017 — 2019
-Crafted brand systems, digital marketing assets, and conversion-driven landing pages.
+Security Operations & Growth | 2022 — 2024
+Built exposure in ASM, phishing-awareness simulation, client reporting, and control validation workflows.
 
-Tools and Technologies
-React, JavaScript, HTML5, CSS, Figma, Git, GitHub, UX strategy
-
-Available for freelance, product design partnerships, and frontend build work.
+Career Focus
+Working toward deeper offensive-security capability in infrastructure, Active Directory, web applications, APIs and red-team execution.
