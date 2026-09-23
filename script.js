@@ -100,9 +100,31 @@ const quickPrompts = [
   'Can you help with BAS and phishing awareness?'
 ];
 
+const servicePillars = [
+  { title: 'Breach & Attack Simulation', text: 'Validate controls with realistic attack simulation across EDR, DLP, email, proxy, and web security layers.' },
+  { title: 'Assessment Reporting', text: 'Turn raw findings into actionable client messaging, risk summaries, and remediation plans.' },
+  { title: 'Phishing & Awareness Support', text: 'Support operational resilience with awareness exercises and reporting tied to user-risk behavior.' },
+  { title: 'Continuous Security Growth', text: 'Build long-term defensive capability through hands-on infrastructure, AD, web app, and API learning.' }
+];
+
+const trustMetrics = [
+  { label: 'Assessment Coverage', value: 'EDR + DLP + Email + Proxy + Web' },
+  { label: 'Client Exposure', value: 'Banking & financial services focus' },
+  { label: 'Response Window', value: 'Within 24 hours' }
+];
+
+const faqItems = [
+  { question: 'What do you specialize in?', answer: 'I focus on breach and attack simulation, security control validation, ASM, phishing awareness support, and client-facing assessment reporting.' },
+  { question: 'Who do you work with?', answer: 'I work with banking, financial services, and security-focused teams that need practical validation and remediation guidance.' },
+  { question: 'Can you support junior security growth?', answer: 'Yes. I combine hands-on validation work with ongoing red-team and offensive security learning to improve both practice and reporting quality.' }
+];
+
 const clientLogos = ['FinSecure', 'Aegis Bank', 'CrestID', 'IronGate', 'NorthStar', 'CyberOne'];
 
 function PortfolioApp() {
+  const sanitizeForDisplay = (value = '') => String(value).replace(/[<>]/g, '').trim();
+  const validateEmail = (value = '') => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value).trim());
+
   const [isChatOpen, setIsChatOpen] = React.useState(false);
   const [chatMessages, setChatMessages] = React.useState([]);
   const [draft, setDraft] = React.useState('');
@@ -111,14 +133,16 @@ function PortfolioApp() {
   const [activeSection, setActiveSection] = React.useState('home');
   const [showBackToTop, setShowBackToTop] = React.useState(false);
   const [activeExperience, setActiveExperience] = React.useState(0);
-  const [contactForm, setContactForm] = React.useState({
+  const defaultContactForm = {
     name: '',
     email: '',
     company: '',
     projectType: 'Breach & Attack Simulation',
     budget: 'Under ₹2L',
     message: ''
-  });
+  };
+
+  const [contactForm, setContactForm] = React.useState(defaultContactForm);
   const [contactStatus, setContactStatus] = React.useState('');
   const [contactState, setContactState] = React.useState('idle');
   const [isSending, setIsSending] = React.useState(false);
@@ -153,7 +177,7 @@ function PortfolioApp() {
 
   const handleChatSubmit = async (event) => {
     event.preventDefault();
-    const message = draft.trim();
+    const message = sanitizeForDisplay(draft).slice(0, 500);
     if (!message) return;
 
     setChatHasStarted(true);
@@ -265,15 +289,26 @@ function PortfolioApp() {
     event.preventDefault();
     const { name, email, company, projectType, budget, message } = contactForm;
 
-    if (!name.trim() || !email.trim() || !message.trim()) {
+    const cleanName = sanitizeForDisplay(name).slice(0, 80);
+    const cleanEmail = sanitizeForDisplay(email).slice(0, 120);
+    const cleanCompany = sanitizeForDisplay(company).slice(0, 120);
+    const cleanMessage = sanitizeForDisplay(message).slice(0, 1200);
+
+    if (!cleanName || !cleanEmail || !cleanMessage) {
       setContactStatus('Please add your name, email, and project details before sending.');
       setContactState('error');
       return;
     }
 
+    if (!validateEmail(cleanEmail)) {
+      setContactStatus('Please enter a valid email address.');
+      setContactState('error');
+      return;
+    }
+
     const enrichedMessage = [
-      message.trim(),
-      company ? `Company: ${company}` : '',
+      cleanMessage,
+      cleanCompany ? `Company: ${cleanCompany}` : '',
       `Project type: ${projectType}`,
       `Budget: ${budget}`
     ].filter(Boolean).join('\n');
@@ -286,7 +321,7 @@ function PortfolioApp() {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message: enrichedMessage })
+        body: JSON.stringify({ name: cleanName, email: cleanEmail, message: enrichedMessage })
       });
 
       const data = await response.json();
@@ -294,7 +329,7 @@ function PortfolioApp() {
         throw new Error(data.error || 'Unable to send your message right now.');
       }
 
-      setContactForm({ name: '', email: '', company: '', projectType: 'Website Design', budget: 'Under $2k', message: '' });
+      setContactForm(defaultContactForm);
       setContactStatus(data.message || 'Your message has been saved successfully.');
       setContactState('success');
     } catch (error) {
@@ -307,25 +342,28 @@ function PortfolioApp() {
 
   return (
     <>
-      <header className="site-header">
-        <div className="container nav-wrap">
-          <a href="#home" className="brand">Atif<span>Ansari</span></a>
+      <header className="site-header border-b border-cyan-400/20 bg-slate-950/85 backdrop-blur-xl">
+        <div className="container nav-wrap mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <a href="#home" className="brand" aria-label="Atif Ansari home">
+            <span className="brand-mark" aria-hidden="true">A</span>
+            <span className="brand-word">Atif<span>Ansari</span></span>
+          </a>
 
           <button
             type="button"
-            className="nav-toggle"
+            className="nav-toggle ml-auto inline-flex items-center justify-center rounded-lg border border-cyan-400/30 bg-slate-900/60 px-3 py-2 text-xl text-slate-100 sm:hidden"
             aria-label="Toggle navigation"
             onClick={() => setMobileMenuOpen((value) => !value)}
           >
             ☰
           </button>
 
-          <nav className={`site-nav ${mobileMenuOpen ? 'is-open' : ''}`}>
+          <nav className={`site-nav hidden items-center gap-5 sm:flex ${mobileMenuOpen ? 'is-open' : ''}`}>
             {['about', 'skills', 'projects', 'approach', 'experience', 'contact'].map((item) => (
               <a
                 key={item}
                 href={`#${item}`}
-                className={activeSection === item ? 'active' : ''}
+                className={`text-[0.72rem] font-medium uppercase tracking-[0.14em] text-slate-300 transition hover:text-white ${activeSection === item ? 'active text-white' : ''}`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {item === 'approach' ? 'Approach' : item.charAt(0).toUpperCase() + item.slice(1)}
@@ -335,26 +373,32 @@ function PortfolioApp() {
         </div>
       </header>
 
-      <main>
-        <section id="home" className="hero">
-          <div className="container hero-grid">
+      <main className="bg-slate-950">
+        <section id="home" className="hero relative overflow-hidden bg-slate-950">
+          <div className="container hero-grid mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
             <div className="hero-visual reveal" aria-hidden="true" />
-            <div className="hero-copy reveal">
-              <p className="eyebrow">Cybersecurity Analyst</p>
-              <h1>Selected security validation and <span>assessment work.</span></h1>
-              <p className="lead">
+            <div className="hero-copy reveal relative z-10 max-w-6xl pt-2">
+              <p className="eyebrow text-cyan-300">Cybersecurity Analyst</p>
+              <h1 className="max-w-[1200px] text-[3.1rem] font-extrabold leading-[0.9] tracking-[-0.06em] text-slate-100 sm:text-[4.3rem] lg:text-[7rem]">
+                Selected security validation and <span className="block text-cyan-300">assessment work.</span>
+              </h1>
+              <p className="lead mt-6 max-w-4xl text-base text-slate-300 sm:text-lg lg:text-[1.5rem]">
                 I’m Mohammad Atif Ansari, a cybersecurity analyst based in Mumbai with 1.5 years of hands-on experience in breach and attack simulation, security validation, and client-focused assessment reporting.
               </p>
-              <div className="hero-actions">
-                <a href="#projects" className="btn btn-primary">View Security Work</a>
-                <a href="#contact" className="btn btn-secondary">Let’s Connect</a>
-                <button type="button" className="btn btn-tertiary" onClick={handleDownloadResume}>Download PDF Resume</button>
+              <div className="hero-actions mt-8 flex flex-wrap items-center gap-4">
+                <a href="#projects" className="btn btn-primary inline-flex items-center justify-center rounded-full bg-cyan-300 px-5 py-3 text-[0.72rem] font-bold uppercase tracking-[0.12em] text-slate-950 shadow-glow transition hover:-translate-y-0.5">View Security Work</a>
+                <a href="#contact" className="btn btn-secondary inline-flex items-center justify-center rounded-full border border-cyan-400/25 bg-slate-900/40 px-5 py-3 text-[0.72rem] font-bold uppercase tracking-[0.12em] text-slate-100 transition hover:-translate-y-0.5">Let’s Connect</a>
+                <button type="button" className="btn btn-tertiary inline-flex items-center justify-center rounded-full border border-violet-400/20 bg-violet-500/10 px-5 py-3 text-[0.72rem] font-bold uppercase tracking-[0.12em] text-slate-100 transition hover:-translate-y-0.5" onClick={handleDownloadResume}>Download PDF Resume</button>
               </div>
-              <ul className="mini-stats">
+              <div className="availability-badge reveal mt-5 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-[0.7rem] font-medium uppercase tracking-[0.12em] text-emerald-200">
+                <span className="inline-block h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)]" />
+                Available for security validation engagements
+              </div>
+              <ul className="mini-stats mt-8 flex flex-wrap gap-4">
                 {portfolioHighlights.map((item) => (
-                  <li key={item.label}>
-                    <strong>{item.value}</strong>
-                    <span>{item.label}</span>
+                  <li key={item.label} className="min-w-[120px] rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-sm">
+                    <strong className="block text-2xl font-bold text-white">{item.value}</strong>
+                    <span className="text-xs uppercase tracking-[0.12em] text-slate-300">{item.label}</span>
                   </li>
                 ))}
               </ul>
@@ -362,12 +406,12 @@ function PortfolioApp() {
           </div>
         </section>
 
-        <section className="trust-strip">
-          <div className="container trust-wrap reveal">
-            <p>Trusted by teams building with clarity</p>
-            <div className="logo-row">
+        <section className="trust-strip py-4">
+          <div className="container trust-wrap reveal mx-auto flex max-w-7xl flex-col gap-4 rounded-2xl border border-cyan-400/20 bg-slate-900/70 px-4 py-4 shadow-lg shadow-black/20 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+            <p className="text-[0.7rem] font-medium uppercase tracking-[0.16em] text-slate-300">Trusted by teams building with clarity</p>
+            <div className="logo-row flex flex-wrap items-center justify-start gap-2 sm:justify-end">
               {clientLogos.map((logo) => (
-                <span key={logo} className="logo-pill">{logo}</span>
+                <span key={logo} className="logo-pill rounded-full border border-cyan-400/20 bg-cyan-500/5 px-3 py-2 text-[0.68rem] font-bold uppercase tracking-[0.08em] text-slate-200">{logo}</span>
               ))}
             </div>
           </div>
@@ -423,6 +467,23 @@ function PortfolioApp() {
           </div>
         </section>
 
+        <section id="capabilities" className="section muted">
+          <div className="container">
+            <div className="section-heading reveal">
+              <p className="eyebrow">Core Capabilities</p>
+              <h2>What clients typically need from a practical security partner.</h2>
+            </div>
+            <div className="skills-grid">
+              {servicePillars.map((item) => (
+                <div key={item.title} className="skill-card reveal">
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section id="projects" className="section">
           <div className="container">
             <div className="section-heading reveal">
@@ -447,6 +508,26 @@ function PortfolioApp() {
                     <a href="#contact">Case Study</a>
                   </div>
                 </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="evidence" className="section muted">
+          <div className="container">
+            <div className="section-heading reveal">
+              <p className="eyebrow">Evidence</p>
+              <h2>Clear signals of operational value and reliability.</h2>
+            </div>
+            <div className="testimonial-grid">
+              {trustMetrics.map((item) => (
+                <div key={item.label} className="testimonial-card reveal">
+                  <div className="stars" aria-label="Trust metric">◆</div>
+                  <p><strong>{item.label}</strong></p>
+                  <footer>
+                    <span>{item.value}</span>
+                  </footer>
+                </div>
               ))}
             </div>
           </div>
@@ -485,6 +566,23 @@ function PortfolioApp() {
                   <span className="step-number">{step.step}</span>
                   <h3>{step.title}</h3>
                   <p>{step.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" className="section">
+          <div className="container">
+            <div className="section-heading reveal">
+              <p className="eyebrow">FAQ</p>
+              <h2>Questions teams often ask before starting a security engagement.</h2>
+            </div>
+            <div className="faq-list">
+              {faqItems.map((item) => (
+                <div key={item.question} className="faq-item reveal">
+                  <h3>{item.question}</h3>
+                  <p>{item.answer}</p>
                 </div>
               ))}
             </div>
@@ -556,6 +654,9 @@ function PortfolioApp() {
             </div>
 
             <form className="contact-form" onSubmit={handleContactSubmit}>
+              <div style={{ position: 'absolute', left: '-9999px', opacity: 0 }} aria-hidden="true">
+                <input type="text" name="website" tabIndex="-1" autoComplete="off" />
+              </div>
               <div className="input-row">
                 <input
                   type="text"

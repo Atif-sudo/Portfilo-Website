@@ -16,6 +16,8 @@ const PLACEHOLDER_OPENAI_KEY_VALUES = new Set([
 const OPENAI_API_KEY = (process.env.OPENAI_API_KEY || '').trim();
 const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1';
+const requestTimestamps = new Map();
+const contactMessages = [];
 
 function hasValidOpenAiKey(value) {
   if (!value) return false;
@@ -25,14 +27,60 @@ function hasValidOpenAiKey(value) {
   return true;
 }
 
+function sanitizeText(value, maxLength = 2000) {
+  return String(value ?? '')
+    .replace(/[\u0000-\u001F\u007F]/g, '')
+    .replace(/[<>]/g, '')
+    .trim()
+    .slice(0, maxLength);
+}
+
+function isEmailValid(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim());
+}
+
+function enforceRateLimit(ip, limitPerMinute = 20) {
+  const now = Date.now();
+  const windowMs = 60 * 1000;
+  const history = requestTimestamps.get(ip) || [];
+  const recent = history.filter((timestamp) => now - timestamp < windowMs);
+
+  if (recent.length >= limitPerMinute) {
+    return false;
+  }
+
+  recent.push(now);
+  requestTimestamps.set(ip, recent);
+  return true;
+}
+
 const VALID_OPENAI_API_KEY = hasValidOpenAiKey(OPENAI_API_KEY) ? OPENAI_API_KEY : '';
 
+app.disable('x-powered-by');
+app.set('trust proxy', 1);
+app.use((req, res, next) => {
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader(
+    'Content-Security-Policy',
+    "default-src 'self'; img-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://unpkg.com https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://api.openai.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none';"
+  );
+  next();
+});
 app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 app.post('/api/chat', async (req, res) => {
-  const message = req.body?.message || '';
+  const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
+  if (!enforceRateLimit(clientIp, 20)) {
+    return res.status(429).json({ error: 'Too many requests. Please try again shortly.' });
+  }
 
-  if (!message.trim()) {
+  const message = sanitizeText(req.body?.message || '', 500);
+
+  if (!message) {
     return res.status(400).json({ error: 'Message is required.' });
   }
 
@@ -74,9 +122,7 @@ app.post('/api/chat', async (req, res) => {
         /no credits remaining|insufficient_quota|billing|quota/i.test(errText) ||
         response.status === 429
       ) {
-        return res.status(200).json({
-          reply: lowCreditMessage
-        });
+        return res.status(200).json({ reply: lowCreditMessage });
       }
 
       throw new Error(errText);
@@ -96,6 +142,37 @@ app.post('/api/chat', async (req, res) => {
       details: error.message
     });
   }
+});
+
+app.post('/api/contact', (req, res) => {
+  const clientIp = req.ip || req.socket.remoteAddress || 'unknown';
+  if (!enforceRateLimit(clientIp, 10)) {
+    return res.status(429).json({ error: 'Too many contact attempts. Please try again later.' });
+  }
+
+  const name = sanitizeText(req.body?.name || '', 80);
+  const email = sanitizeText(req.body?.email || '', 120);
+  const message = sanitizeText(req.body?.message || '', 1200);
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: 'Name, email, and message are required.' });
+  }
+
+  if (!isEmailValid(email)) {
+    return res.status(400).json({ error: 'Please provide a valid email address.' });
+  }
+
+  contactMessages.push({
+    name,
+    email,
+    message,
+    createdAt: new Date().toISOString(),
+    clientIp
+  });
+
+  return res.status(200).json({
+    message: 'Your inquiry has been received successfully. I will get back to you soon.'
+  });
 });
 
 app.use(express.static(path.join(__dirname)));
